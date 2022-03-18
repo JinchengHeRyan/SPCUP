@@ -33,7 +33,7 @@ class TruncateDataLoader(DataLoader):
 
     def collate_fn(self, batch):
         batch = list(zip(*batch))
-        (wav_utt, fbank, wav_spec, wav_phase, wav) = batch
+        (wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num) = batch
         wav = torch.stack(wav, dim=0)
         wav_spec = torch.stack(wav_spec, dim=0)
-        return wav_utt, fbank, wav_spec, wav_phase, wav
+        return wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num

@@ -108,7 +108,7 @@ class SpecDataset(Dataset):
         wav = torch.from_numpy(wav)
         fbank = torch.from_numpy(fbank)
         wav_spec = torch.from_numpy(wav_spec)
-        return wav_utt, fbank, wav_spec, wav_phase, wav
+        return wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num
 
     def __len__(self):
         return self.len
