@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 import sys
 import os
@@ -21,3 +22,11 @@ def spec2wav(mag, phase, power):
     D = np.power(D, 1 / power)
     y = librosa.istft(D, win_length=400, hop_length=160)
     return y
+
+
+def acc(output, target):
+    with torch.no_grad():
+        pred = torch.argmax(output, dim=1)
+        assert pred.shape[0] == target.shape[0]
+        correct = torch.sum(pred == target).item()
+    return correct / len(target)
