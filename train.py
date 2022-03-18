@@ -33,11 +33,6 @@ def main(config, resume_path, name, print_freq):
     # testset = get_instance(dataset, config["testset"])
     # testloader = get_instance(dataloader, config["testloader"], testset)
 
-    vp_extractor = get_instance(module_model, config["voiceprint_extractor"])
-    vp_extractor.load_state_dict(torch.load(config["voiceprint_extractor_path"]))
-    vp_extractor = nn.DataParallel(vp_extractor).cuda()
-    # vp_extractor.eval()
-
     model = get_instance(module_model, config["model"])
     model = nn.DataParallel(model).cuda()
 
@@ -48,9 +43,8 @@ def main(config, resume_path, name, print_freq):
     with open(os.path.join(chkpt_dir, "config.json"), "w") as wfile:
         json.dump(config, wfile, indent=4, sort_keys=False)
 
-    model_params = list(filter(lambda p: p.requires_grad, model.parameters())) + list(
-        filter(lambda p: p.requires_grad, vp_extractor.parameters())
-    )
+    model_params = list(filter(lambda p: p.requires_grad, model.parameters()))
+
     optimizer = get_instance(torch.optim, config["optimizer"], model_params)
     lr_scheduler = get_instance(
         torch.optim.lr_scheduler, config["lr_scheduler"], optimizer
@@ -78,7 +72,6 @@ def main(config, resume_path, name, print_freq):
         config["Trainer"],
         chkpt_dir=chkpt_dir,
         model=model,
-        vp_extractor=vp_extractor,
         optimizer=optimizer,
         criterion=criterion,
         lr_scheduler=lr_scheduler,
@@ -130,12 +123,5 @@ if __name__ == "__main__":
     assert os.path.isfile(args.config), "No such file: %s" % args.config
     with open(args.config) as rfile:
         config = json.load(rfile)
-
-    # Select GPU. If no GPUs are found, the program terminates.
-    # deviceIDs = get_instance(GPUtil, config['GPUtil'])
-    # assert deviceIDs != [], "No GPUs available!"
-    # print("Use GPU:", deviceIDs)
-    # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, deviceIDs))
-    # os.environ["OMP_NUM_THREADS"] = '1'
 
     main(config, args.resume, args.name, args.print_freq)
