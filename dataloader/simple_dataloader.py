@@ -23,4 +23,5 @@ class SimpleDataLoader(DataLoader):
         wav = torch.stack(wav, dim=0)
         wav_spec = torch.stack(wav_spec, dim=0)
         fbank = torch.stack(fbank, dim=0)
+        algorithm_num = torch.tensor(algorithm_num)
         return wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num
