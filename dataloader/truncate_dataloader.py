@@ -36,4 +36,5 @@ class TruncateDataLoader(DataLoader):
         (wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num) = batch
         wav = torch.stack(wav, dim=0)
         wav_spec = torch.stack(wav_spec, dim=0)
+        fbank = torch.stack(fbank, dim=0)
         return wav_utt, fbank, wav_spec, wav_phase, wav, algorithm_num
