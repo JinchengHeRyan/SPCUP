@@ -20,6 +20,14 @@
             "power": 0.3
         }
     },
+    "testset": {
+        "type": "SpecDataset",
+        "args": {
+            "wav_scp": "data/dev/wav.scp",
+            "label_path": "data/dev/labels.csv",
+            "power": 0.3
+        }
+    },
     "trainloader": {
         "type": "TruncateDataLoader",
         "args": {
