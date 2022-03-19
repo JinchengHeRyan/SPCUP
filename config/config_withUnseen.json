@@ -1,0 +1,80 @@
+{
+    "epochs": 50,
+    "GPUtil": {
+        "type": "getAvailable",
+        "args": {
+            "limit": 1,
+            "maxMemory": 0.1,
+            "maxLoad": 0.1
+        }
+    },
+    "Trainer": {
+        "type": "Trainer",
+        "args": {}
+    },
+    "trainset": {
+        "type": "SpecDataset",
+        "args": {
+            "wav_scp": "data/train/wav.scp",
+            "label_path": "data/train/labels.csv",
+            "power": 0.3
+        }
+    },
+    "testset": {
+        "type": "SpecDataset",
+        "args": {
+            "wav_scp": "data/dev/wav.scp",
+            "label_path": "data/dev/labels.csv",
+            "power": 0.3
+        }
+    },
+    "trainloader": {
+        "type": "TruncateDataLoader",
+        "args": {
+            "trun_range": [
+                48000,
+                48000
+            ],
+            "batch_size": 64,
+            "num_workers": 16,
+            "shuffle": true,
+            "drop_last": true
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 0.0001
+        }
+    },
+    "lr_scheduler": {
+        "type": "MultiStepLR",
+        "args": {
+            "milestones": [
+                25,
+                40
+            ],
+            "gamma": 1
+        }
+    },
+    "loss": {
+        "type": "CrossEntropyLoss",
+        "args": {}
+    },
+    "voiceprint_extractor_path": "model/resnet18c16_vox12_aug_eer3.mdl",
+    "model": {
+        "type": "Gvector",
+        "args": {
+            "channels": 16,
+            "num_blocks": [
+                2,
+                2,
+                2,
+                2
+            ],
+            "embd_dim": 128,
+            "drop": 0.5,
+            "class_num": 6
+        }
+    }
+}
