@@ -43,14 +43,10 @@ def main(config, args):
             fbank.view(fbank.shape[0], 1, fbank.shape[1], fbank.shape[2]).float().cuda()
         )
 
-        threshold = 0.9
         with torch.no_grad():
             pred = model(fbank)
-            if torch.max(pred) < threshold:
-                pred = 5
-            else:
-                pred = torch.argmax(pred, dim=1)
-                pred = int(pred.to("cpu"))
+            pred = torch.argmax(pred, dim=1)
+            pred = int(pred.to("cpu"))
         output_file.write("{}, {}\n".format(wav_utt[0], pred))
 
 
